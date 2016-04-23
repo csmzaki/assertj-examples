@@ -13,6 +13,7 @@
 package org.assertj.examples;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.presentation.StandardRepresentation.STANDARD_REPRESENTATION;
 
 import org.assertj.core.api.Assertions;
 import org.assertj.core.presentation.StandardRepresentation;
@@ -51,6 +52,19 @@ public class RepresentationExamples extends AbstractAssertionsExamples {
                       .hasMessageContaining("\"bar\"");
       }
     }
+  }
+  
+  @Test
+  public void should_use_registered_formatter_for_type_for_any_representations() {
+    // GIVEN
+    Object string = "foo"; // need to declare as an Object otherwise toStringOf(String) is used
+    assertThat(STANDARD_REPRESENTATION.toStringOf(string)).isEqualTo("\"foo\"");
+    // WHEN
+    Assertions.registerFormatterForType(String.class, value -> "$" + value + "$");
+    // THEN
+    assertThat(STANDARD_REPRESENTATION.toStringOf(string)).isEqualTo("$foo$");
+    Assertions.useDefaultRepresentation();
+    assertThat(STANDARD_REPRESENTATION.toStringOf(string)).isEqualTo("\"foo\"");
   }
   
   private class Example {}
