@@ -35,6 +35,7 @@ public class NumberAssertionsExamples extends AbstractAssertionsExamples {
 
     // equals / no equals assertions
     assertThat(sam.age).isEqualTo(38)
+                       .isBetween(37, 39)
                        .isCloseTo(40, within(10));
     assertThat(frodo.age).isEqualTo(33).isNotEqualTo(sam.age);
 

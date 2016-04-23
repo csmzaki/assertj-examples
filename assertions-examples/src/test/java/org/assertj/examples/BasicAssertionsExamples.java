@@ -14,6 +14,7 @@ package org.assertj.examples;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.atIndex;
+import static org.assertj.core.presentation.StandardRepresentation.STANDARD_REPRESENTATION;
 import static org.assertj.core.util.Lists.newArrayList;
 import static org.assertj.examples.data.Race.ELF;
 import static org.assertj.examples.data.Race.HOBBIT;
@@ -22,14 +23,12 @@ import static org.assertj.examples.data.Ring.nenya;
 import static org.assertj.examples.data.Ring.oneRing;
 import static org.assertj.examples.data.Ring.vilya;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 
 import org.assertj.core.api.Assertions;
-import org.assertj.core.api.AssertionsForInterfaceTypes;
-import org.assertj.core.util.Lists;
 import org.assertj.core.util.introspection.IntrospectionError;
 import org.assertj.examples.comparator.AtPrecisionComparator;
 import org.assertj.examples.data.Person;
@@ -329,6 +328,20 @@ public class BasicAssertionsExamples extends AbstractAssertionsExamples {
     Assertions.setAllowComparingPrivateFields(true);
   }
 
+  @Test
+  public void should_use_registered_formatter_for_type_for_any_representations() {
+    // GIVEN
+    Object string = "foo"; // need to declare as an Object otherwise toStringOf(String) is used
+    assertThat(STANDARD_REPRESENTATION.toStringOf(string)).isEqualTo("\"foo\"");
+    // WHEN
+    Assertions.registerFormatterForType(String.class, value -> "$" + value + "$");
+    // THEN
+    assertThat(STANDARD_REPRESENTATION.toStringOf(string)).isEqualTo("$foo$");
+    Assertions.useDefaultRepresentation();
+    assertThat(STANDARD_REPRESENTATION.toStringOf(string)).isEqualTo("\"foo\"");
+  }
+
+  
   @Test
   public void usingFieldByFieldElementComparatorTest() throws Exception {
     List<Animal> animals = new ArrayList<>();

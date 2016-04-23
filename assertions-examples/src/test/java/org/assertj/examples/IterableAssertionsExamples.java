@@ -38,6 +38,7 @@ import static org.assertj.examples.extractor.TolkienCharactersExtractors.ageAndR
 import static org.assertj.examples.extractor.TolkienCharactersExtractors.race;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -247,7 +248,7 @@ public class IterableAssertionsExamples extends AbstractAssertionsExamples {
   public void iterable_assertions_on_several_extracted_values() {
 
     // extract 'name' and 'age' values.
-    assertThat(fellowshipOfTheRing).extracting("name", "age").contains(tuple("Boromir", 37), 
+    assertThat(fellowshipOfTheRing).extracting("name", "age").contains(tuple("Boromir", 37),
                                                                        tuple("Sam", 38),
                                                                        tuple("Legolas", 1000));
 
@@ -468,6 +469,10 @@ public class IterableAssertionsExamples extends AbstractAssertionsExamples {
   public void iterable_assertions_on_flat_extracted_values_examples() throws Exception {
     assertThat(newArrayList(noah, james)).flatExtracting(teammates()).contains(dwayne, rose);
     assertThat(newArrayList(noah, james)).flatExtracting("teamMates").contains(dwayne, rose);
+
+    assertThat(fellowshipOfTheRing).flatExtracting(c -> Arrays.asList(c.getName(), c.getRace().getName()))
+                                   .contains("Hobbit", "Frodo", "Elf", "Legolas");
+
   }
 
   @Test
