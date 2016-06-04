@@ -470,7 +470,18 @@ public class IterableAssertionsExamples extends AbstractAssertionsExamples {
     assertThat(newArrayList(noah, james)).flatExtracting(teammates()).contains(dwayne, rose);
     assertThat(newArrayList(noah, james)).flatExtracting("teamMates").contains(dwayne, rose);
 
+    // extract a list of values, flatten them and use contains assertion
     assertThat(fellowshipOfTheRing).flatExtracting(c -> Arrays.asList(c.getName(), c.getRace().getName()))
+                                   .contains("Hobbit", "Frodo", "Elf", "Legolas");
+
+    // same goal but instead of extracting a list of values, give the list properties/fields to extract :
+    assertThat(fellowshipOfTheRing).flatExtracting("name",
+                                                   "race.name")
+                                   .contains("Hobbit", "Frodo", "Elf", "Legolas");
+
+    // same goal but specify a list of single value extractors instead of a list extractor :
+    assertThat(fellowshipOfTheRing).flatExtracting(TolkienCharacter::getName,
+                                                   tc -> tc.getRace().getName())
                                    .contains("Hobbit", "Frodo", "Elf", "Legolas");
 
   }
